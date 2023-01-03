@@ -98,7 +98,6 @@ def follow_marker(drone, action, intrinsic, distortion, strict=False):
             # when condition is not meet for follow or follow back
             return
 
-#def follow_face(drone, follow_dist intrinsic, distortion, until):
 def follow_face(drone, inst, follow_dist, intrinsic, distortion, until=None):
     not_seen = 0
     if until is None:

@@ -17,18 +17,7 @@ def blue_only(frame):
     # so when multiplied with original image removes all non-blue regions
     result = cv2.bitwise_and(frame, frame, mask = mask)
     return result
-
-def _blue_only(img):
-    rows, cols, chs = img.shape
-    for row in range(rows):
-        for col in range(cols):
-            b,g,r = img[row][col]
-            if b > 20 and b * 0.65 > g and b * 0.65 > r:
-                pass 
-            else:
-                gray = b/3 + g/3 + r/3
-                img[row][col] = gray,gray,gray
-    return img
+    
 def blue_yellow(img):
     rows, cols, chs = img.shape
     for row in range(rows):

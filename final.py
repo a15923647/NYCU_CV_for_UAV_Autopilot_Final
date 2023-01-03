@@ -18,31 +18,6 @@ print(drone)
 def control_drone(drone, inst, dis):
     print(f"control drone: {inst}, {dis}")
     drone.move(inst, dis)
-rise_speed = 15
-def rise_until_see_face(drone):
-    prev_closet = float("inf")
-    while True:
-        drone.streamon()
-        frame = drone.get_frame_read().frame
-
-        closet_dist, remains = detect_nearest_face(frame, intrinsic, distortion, draw_img=True)
-        
-        cv2.imshow('drone', frame)
-        key = cv2.waitKey(100)
-        if key != -1:
-            drone.keyboard(key)
-            continue
-        if not drone.is_flying:
-            continue
-        
-        # rise until closet_dist is decreasing or not see any face
-        if closet_dist != float("inf"):# and closet_dist >= prev_closet:
-            return
-        print("rising")
-        drone.send_rc_control(0, 0, rise_speed, 0)
-
-def yaw(drone, speed):
-    drone.send_rc_control(0, 0, 0, speed)
 
 def detect_toy(drone):
     while detect_toy.result == '':
@@ -74,23 +49,16 @@ def dynamic_trace_line(drone, det_toy_fn):
     is_done = marker_in_frame
     trace_line(drone, pipeline, pipeline_transition, is_done, show_blue=True)
 
-def keep_follow_face_until_marker(drone, dist):
-    follow_face(drone, 'keep_follow_face', dist, intrinsic, distortion, until=lambda frame, _: marker_in_frame(frame))
-    
-
 def main():
     drone.is_flying = False
     drone.ready = False
 
     detect_toy.result = ''
-
-    #rise_until_see_face(drone)
     
     action_pipeline = list(range(5))
     action_pipeline[0] = [('forward', 100, False), ('up', 80), ('follow_face', 130), ('right', 60), ('forward', 140)]
     action_pipeline[1] = [('follow_face', 120), ('left', 50), ('forward', 100), (drone.rotate_counter_clockwise, (90,))]
     action_pipeline[2] = [('follow', 300, False), (detect_toy, (drone,))]
-    #action_pipeline[2] = [('follow', 30)]
     action_pipeline[3] = [('follow', 120, False), (dynamic_trace_line, (drone, detect_toy)), ('left', 60),  (drone.rotate_counter_clockwise, (180,))]
     
     action_pipeline[4] = [('follow_face', 70), (drone.rotate_counter_clockwise, (135,)), ('follow', 80, False), (drone.land,)]

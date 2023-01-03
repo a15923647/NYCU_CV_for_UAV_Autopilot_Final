@@ -1,0 +1,4 @@
+djitellopy==2.4.0
+dlib==19.24.0
+numpy==1.23.3
+~pencv_python==4.6.0.66

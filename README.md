@@ -3,3 +3,7 @@
 instructor: 陳冠文 教授\
 Group 8\
 video: https://youtu.be/CtFBvnbKZxM
+# How to run
+```shell
+$ python final.py
+```
